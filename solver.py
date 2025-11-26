@@ -1,3 +1,7 @@
+from heuristic import get_letter_freq, score_guess
+from feedback import feedback_pattern, matches_feedback
+
+
 def get_words():
     wordlist =[]
     with open("words.txt", "r") as words:
@@ -6,25 +10,7 @@ def get_words():
             wordlist.append(stripped)
     return wordlist
 
-def get_letter_freq(S):
-    freq_dict = {}
-    for word in S:
-        for letter in set(word):
-            if letter not in freq_dict:
-                freq_dict[letter] = 1
-            else:
-                freq_dict[letter] += 1
-    return freq_dict
 
-
-#.get is for key access for potentially unimplemented keys
-#second arguement is the return if it doesn't exist
-def score_guess(guess, letter_freq):
-    unique_letters = set(guess)
-    score = 0
-    for letter in unique_letters:
-        score += letter_freq.get(letter, 0) 
-    return score
 
 def choose_best_guess(S):
     best_score = -1
@@ -37,30 +23,7 @@ def choose_best_guess(S):
             best_word  = word
     return best_word
 
-def feedback_pattern(guess, answer):
-    pattern = []
-    for i in range(len(answer)):
-        if guess[i] == answer[i]:
-            pattern.append("G")
-        elif guess[i] in answer:
-            pattern.append("Y")
-        elif guess[i] not in answer:
-            pattern.append("B")
-    return "".join(pattern)
 
-
-def matches_feedback(word, guess, pattern):
-    for i in range(len(pattern)):
-        if pattern[i] == "G":
-            if word[i] != guess[i]:
-                return False
-        elif pattern[i] == "Y":
-            if guess[i] not in word or guess[i] == word[i]:
-                return False
-        elif pattern[i] == "B": #duplicates problem
-            if guess[i] in word:
-                return False
-    return True
 
 
 def solve(answer):
